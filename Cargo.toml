@@ -1,0 +1,19 @@
+[package]
+name = "stdin_or_clipboard"
+version = "0.1.0"
+edition = "2021"
+description = "Get text from stdin or clipboard"
+
+[dependencies]
+# Read Clipboard
+arboard = { version = "3.4", default-features = false }
+
+# Error management
+thiserror = "1.0"
+
+# Async utilities
+tokio = { version = "1.40", features = ["io-util", "io-std"] }
+
+[dev-dependencies]
+arboard = "3.4"
+tokio = { version = "1.40", features = ["io-util", "io-std", "macros", "rt", "rt-multi-thread"] }
