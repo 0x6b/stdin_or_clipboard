@@ -6,12 +6,29 @@ I often found myself writing code to retrieve text from the clipboard or stdin, 
 
 ## Usage
 
+### Asynchronously
+
+The `async` feature is enabled by default.
+
 ```rust
 use stdin_or_clipboard::get_text_from_stdin_or_clipboard;
 
 #[tokio::main]
 async fn main() {
     let text = get_text_from_stdin_or_clipboard().await.unwrap();
+    println!("{text}");
+}
+```
+
+### Synchronously
+
+With the `sync` feature enabled, you can use this crate synchronously.
+
+```rust
+use stdin_or_clipboard::sync::get_text_from_stdin_or_clipboard;
+
+fn main() {
+    let text = get_text_from_stdin_or_clipboard().unwrap();
     println!("{text}");
 }
 ```
