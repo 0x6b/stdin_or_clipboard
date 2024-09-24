@@ -9,7 +9,8 @@ use crate::error::Error;
 ///
 /// # Returns
 ///
-/// The text from stdin or the system clipboard, trimmed.
+/// Tuple containing the text from stdin or the system clipboard, trimmed, and the clipboard if the
+/// text was retrieved from the clipboard.
 ///
 /// # Errors
 ///
@@ -22,16 +23,17 @@ use crate::error::Error;
 ///
 /// #[tokio::main]
 /// async fn main() {
-///    let text = get_text_from_stdin_or_clipboard().await.unwrap();
+///    let (text, clipboard) = get_text_from_stdin_or_clipboard().await.unwrap();
 ///    println!("{text}");
 /// }
 /// ```
-pub async fn get_text_from_stdin_or_clipboard() -> Result<String, Error> {
+pub async fn get_text_from_stdin_or_clipboard() -> Result<(String, Option<Clipboard>), Error> {
     if std::io::stdin().is_terminal() {
-        Ok(Clipboard::new()?.get_text()?.trim().to_string())
+        let mut clipboard = Clipboard::new()?;
+        Ok((clipboard.get_text()?.trim().to_string(), Some(clipboard)))
     } else {
         let mut text = String::new();
         stdin().read_to_string(&mut text).await?;
-        Ok(text.trim().to_string())
+        Ok((text.trim().to_string(), None))
     }
 }

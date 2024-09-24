@@ -8,7 +8,8 @@ use crate::error::Error;
 ///
 /// # Returns
 ///
-/// The text from stdin or the system clipboard, trimmed.
+/// Tuple containing the text from stdin or the system clipboard, trimmed, and the clipboard if the
+/// text was retrieved from the clipboard.
 ///
 /// # Errors
 ///
@@ -19,15 +20,16 @@ use crate::error::Error;
 /// ```rust
 /// use stdin_or_clipboard::sync::get_text_from_stdin_or_clipboard;
 ///
-/// let text = get_text_from_stdin_or_clipboard().unwrap();
+/// let (text, clipboard) = get_text_from_stdin_or_clipboard().unwrap();
 /// println!("{text}");
 /// ```
-pub fn get_text_from_stdin_or_clipboard() -> Result<String, Error> {
+pub fn get_text_from_stdin_or_clipboard() -> Result<(String, Option<Clipboard>), Error> {
     if stdin().is_terminal() {
-        Ok(Clipboard::new()?.get_text()?.trim().to_string())
+        let mut clipboard = Clipboard::new()?;
+        Ok((clipboard.get_text()?.trim().to_string(), Some(clipboard)))
     } else {
         let mut text = String::new();
         stdin().read_to_string(&mut text)?;
-        Ok(text.trim().to_string())
+        Ok((text.trim().to_string(), None))
     }
 }

@@ -15,7 +15,7 @@ use stdin_or_clipboard::get_text_from_stdin_or_clipboard;
 
 #[tokio::main]
 async fn main() {
-    let text = get_text_from_stdin_or_clipboard().await.unwrap();
+    let (text, clipboard) = get_text_from_stdin_or_clipboard().await.unwrap();
     println!("{text}");
 }
 ```
@@ -28,7 +28,7 @@ With the `sync` feature enabled, you can use this crate synchronously.
 use stdin_or_clipboard::sync::get_text_from_stdin_or_clipboard;
 
 fn main() {
-    let text = get_text_from_stdin_or_clipboard().unwrap();
+    let (text, clipboard) = get_text_from_stdin_or_clipboard().unwrap();
     println!("{text}");
 }
 ```
