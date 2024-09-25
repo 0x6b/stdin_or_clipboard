@@ -34,6 +34,6 @@ pub async fn get_text_from_stdin_or_clipboard() -> Result<(String, Option<Clipbo
     } else {
         let mut text = String::new();
         stdin().read_to_string(&mut text).await?;
-        Ok((text.trim().to_string(), None))
+        Ok((text.trim().to_string(), Clipboard::new().ok()))
     }
 }
