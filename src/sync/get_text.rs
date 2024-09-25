@@ -30,6 +30,6 @@ pub fn get_text_from_stdin_or_clipboard() -> Result<(String, Option<Clipboard>),
     } else {
         let mut text = String::new();
         stdin().read_to_string(&mut text)?;
-        Ok((text.trim().to_string(), None))
+        Ok((text.trim().to_string(), Clipboard::new().ok()))
     }
 }
