@@ -1,6 +1,6 @@
 [package]
 name = "clipin"
-version = "0.9.2"
+version = "0.10.0"
 edition = "2024"
 authors = ["kaoru <k@warpnine.io>"]
 license = "MIT"
@@ -19,11 +19,11 @@ arboard = { version = "3.6", default-features = false }
 thiserror = "2.0"
 
 # Async utilities
-tokio = { version = "1.49", features = ["io-util", "io-std"], optional = true }
+tokio = { version = "1.53", features = ["io-util", "io-std"], optional = true }
 
 [dev-dependencies]
 arboard = "3.6"
-tokio = { version = "1.49", features = ["io-util", "io-std", "macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.53", features = ["io-util", "io-std", "macros", "rt", "rt-multi-thread"] }
 
 [features]
 default = []
