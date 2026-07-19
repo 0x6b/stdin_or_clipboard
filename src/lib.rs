@@ -13,12 +13,12 @@
 #[cfg(feature = "sync")]
 use std::io::Read;
 #[cfg(any(feature = "async", feature = "sync"))]
-use std::io::{stdin, IsTerminal};
+use std::io::{IsTerminal, stdin};
 use std::{borrow::Cow, io};
 
 use thiserror::Error;
 #[cfg(feature = "async")]
-use tokio::io::{stdin as async_stdin, AsyncReadExt};
+use tokio::io::{AsyncReadExt, stdin as async_stdin};
 
 /// Errors that can occur when reading from stdin or clipboard.
 #[derive(Error, Debug)]

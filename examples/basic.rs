@@ -1,3 +1,7 @@
+#[cfg(feature = "async")]
+use clipin::get;
+#[cfg(feature = "sync")]
+use clipin::get;
 #[cfg(all(feature = "async", feature = "sync"))]
 compile_error!("features \"async\" and \"sync\" are mutually exclusive; enable exactly one.");
 
@@ -7,12 +11,12 @@ compile_error!("enable a feature: cargo run --example basic --features async|syn
 #[cfg(feature = "async")]
 #[tokio::main]
 async fn main() {
-    let (text, _clipboard) = clipin::get().await.unwrap();
+    let (text, _clipboard) = get().await.unwrap();
     println!("{text}");
 }
 
 #[cfg(feature = "sync")]
 fn main() {
-    let (text, _clipboard) = clipin::get().unwrap();
+    let (text, _clipboard) = get().unwrap();
     println!("{text}");
 }
