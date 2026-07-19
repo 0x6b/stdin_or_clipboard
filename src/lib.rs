@@ -1,7 +1,7 @@
 //! Get text from clipboard or stdin.
 //!
 //! This crate provides a single function [`get`] that reads text from the system clipboard
-//! (if running in a terminal) or stdin (if piped). Returns trimmed text and optionally a
+//! (if running in a terminal) or stdin (if piped). Returns the text and optionally a
 //! [`Clipboard`] instance for further operations.
 //!
 //! # Features
@@ -66,8 +66,6 @@ compile_error!("features \"async\" and \"sync\" are mutually exclusive; enable e
 /// instance for further operations. If stdin is piped, reads from stdin and attempts
 /// to return a [`Clipboard`] instance if available.
 ///
-/// The returned text is trimmed of leading and trailing whitespace.
-///
 /// # Errors
 ///
 /// Returns [`Error::Clipboard`] if clipboard access fails, or [`Error::Io`] if reading
@@ -76,11 +74,11 @@ compile_error!("features \"async\" and \"sync\" are mutually exclusive; enable e
 pub fn get() -> Result<(String, Option<Clipboard>), Error> {
     if stdin().is_terminal() {
         let mut cb = Clipboard(arboard::Clipboard::new()?);
-        Ok((cb.get_text()?.trim().to_owned(), Some(cb)))
+        Ok((cb.get_text()?, Some(cb)))
     } else {
         let mut buf = String::new();
         stdin().read_to_string(&mut buf)?;
-        Ok((buf.trim().to_owned(), arboard::Clipboard::new().ok().map(Clipboard)))
+        Ok((buf, arboard::Clipboard::new().ok().map(Clipboard)))
     }
 }
 
@@ -90,8 +88,6 @@ pub fn get() -> Result<(String, Option<Clipboard>), Error> {
 /// instance for further operations. If stdin is piped, reads from stdin and attempts
 /// to return a [`Clipboard`] instance if available.
 ///
-/// The returned text is trimmed of leading and trailing whitespace.
-///
 /// # Errors
 ///
 /// Returns [`Error::Clipboard`] if clipboard access fails, or [`Error::Io`] if reading
@@ -100,10 +96,10 @@ pub fn get() -> Result<(String, Option<Clipboard>), Error> {
 pub async fn get() -> Result<(String, Option<Clipboard>), Error> {
     if stdin().is_terminal() {
         let mut cb = Clipboard(arboard::Clipboard::new()?);
-        Ok((cb.get_text()?.trim().to_owned(), Some(cb)))
+        Ok((cb.get_text()?, Some(cb)))
     } else {
         let mut buf = String::new();
         async_stdin().read_to_string(&mut buf).await?;
-        Ok((buf.trim().to_owned(), arboard::Clipboard::new().ok().map(Clipboard)))
+        Ok((buf, arboard::Clipboard::new().ok().map(Clipboard)))
     }
 }
